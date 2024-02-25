@@ -19,7 +19,9 @@ def login():
         row = cursor.fetchone()
 
         if row:
-            messagebox.showinfo("Login Successful", "Welcome, User!")
+            #messagebox.showinfo("Login Successful", "Welcome, User!")
+            login_window.destroy()
+            open_main_window()
         else:
             messagebox.showwarning("Login failed", "Invalid Username or Password!")
 
@@ -31,24 +33,31 @@ def login():
 def click_here():
     print("Hello World")
 
-window = tk.Tk()
-window.title("Login window")
+# Function to open the main window
+def open_main_window():
+    # Create main window
+    main_window = tk.Tk()
+    main_window.title("Main Window")
+    # Add widgets and functionalities for the main window here
 
-username_label = tk.Label(window,text="Username")
+login_window = tk.Tk()
+login_window.title("Login window")
+
+username_label = tk.Label(login_window,text="Username")
 username_label.grid(row=1, column=0,padx=10,pady=5)
 
-username_entry = tk.Entry(window)
+username_entry = tk.Entry(login_window)
 username_entry.grid(row=1, column=1,padx=10,pady=5)
 
 
-password_label = tk.Label(window,text="Password")
+password_label = tk.Label(login_window,text="Password")
 password_label.grid(row=2, column=0,padx=10,pady=5)
 
-password_entry = tk.Entry(window)
+password_entry = tk.Entry(login_window)
 password_entry.grid(row=2, column=1,padx=10,pady=5)
 
-login_button = tk.Button(window,text="Login",command=login)
+login_button = tk.Button(login_window,text="Login",command=login)
 login_button.grid(row=3, column=1,padx=10,pady=5)
 
-window.mainloop()
+login_window.mainloop()
 
