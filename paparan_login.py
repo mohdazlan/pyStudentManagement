@@ -21,7 +21,8 @@ def login():
         if row:
             #messagebox.showinfo("Login Successful", "Welcome, User!")
             tetingkap_login.destroy()
-            open_main_window()
+            import paparan_utama
+            paparan_utama.open_main_window()
         else:
             messagebox.showwarning("Login failed", "Invalid Username or Password!")
 
@@ -33,12 +34,8 @@ def login():
 def click_here():
     print("Hello World")
 
-# Function to open the main window
-def open_main_window():
-    # Create main window
-    main_window = tk.Tk()
-    main_window.title("Main Window")
-    # Add widgets and functionalities for the main window here
+ 
+ 
 
 tetingkap_login = tk.Tk()
 tetingkap_login.title("Login window")

@@ -1,3 +1,3 @@
-import log_in
+import paparan_login
 
-log_in.tetingkap_login.mainloop()
+paparan_login.tetingkap_login.mainloop()
