@@ -5,6 +5,38 @@ import pymssql
 # Function to handle adding students
 def add_student():
     x = 9
+def update_student(student_id):
+    # Open a separate update form/dialog to edit the student information
+    # You can implement this function based on your specific requirements
+    x = 9
+
+# Function to handle deleting a student
+def delete_student(student_id):
+    # Prompt the user for confirmation before deleting the student
+    confirmed = messagebox.askyesno("Confirmation", "Are you sure you want to delete this student?")
+    if confirmed:
+        try:
+            # Establish a connection to the SQL Server database
+            connection = pymssql.connect(server='your_server_name',
+                                         user='your_username',
+                                         password='your_password',
+                                         database='your_database_name')
+            cursor = connection.cursor()
+
+            # Execute an SQL DELETE statement to delete the student from the database
+            cursor.execute("DELETE FROM Students WHERE student_id = %s", (student_id,))
+            connection.commit()
+
+            # Close the cursor and connection
+            cursor.close()
+            connection.close()
+
+            # Show success message
+            messagebox.showinfo("Success", "Student deleted successfully!")
+        except Exception as e:
+            # Show error message if an error occurs
+            messagebox.showerror("Error", f"An error occurred: {str(e)}")
+
 
 def view_students():
     try:
@@ -32,9 +64,17 @@ def view_students():
 
         # Display the fetched student data in the Listbox
         if students:
+            #for student in students:
+            #    student_info = f"ID: {student[0]}, Name: {student[1]}, Phone: {student[2]}"
+            #    student_listbox.insert(tk.END, student_info)
             for student in students:
                 student_info = f"ID: {student[0]}, Name: {student[1]}, Phone: {student[2]}"
                 student_listbox.insert(tk.END, student_info)
+            # Add update and delete buttons for each student
+            update_button = tk.Button(student_window, text="Update", command=lambda sid=student[0]: update_student(sid))
+            update_button.pack()
+            delete_button = tk.Button(student_window, text="Delete", command=lambda sid=student[0]: delete_student(sid))
+            delete_button.pack()
         else:
             student_listbox.insert(tk.END, "No students available.")
 
@@ -58,7 +98,7 @@ def open_main_window():
     name_entry.grid(row=0, column=1, padx=5, pady=5)
 
     # Student ID Entry
-    id_label = tk.Label(main_window, text="ID:")
+    id_label = tk.Label(main_window, text="Phone:")
     id_label.grid(row=1, column=0, padx=5, pady=5, sticky="e")
     id_entry = tk.Entry(main_window, width=30)
     id_entry.grid(row=1, column=1, padx=5, pady=5)
