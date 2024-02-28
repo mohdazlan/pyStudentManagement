@@ -6,15 +6,28 @@ import pymssql
 def add_student():
     x = 9
 def update_student(student_id):
-    # Open a separate update form/dialog to edit the student information
-    # You can implement this function based on your specific requirements
-    x = 9
+    # Create a new window for updating student information
+    update_window = tk.Toplevel()
+    update_window.title("Update Student")
 
-# Function to handle deleting a student
-def delete_student(student_id):
-    # Prompt the user for confirmation before deleting the student
-    confirmed = messagebox.askyesno("Confirmation", "Are you sure you want to delete this student?")
-    if confirmed:
+    # Label and Entry for student name
+    name_label = tk.Label(update_window, text="Name:")
+    name_label.grid(row=0, column=0, padx=5, pady=5, sticky="e")
+    name_entry = tk.Entry(update_window, width=30)
+    name_entry.grid(row=0, column=1, padx=5, pady=5)
+
+    # Label and Entry for student ID
+    id_label = tk.Label(update_window, text="ID:")
+    id_label.grid(row=1, column=0, padx=5, pady=5, sticky="e")
+    id_entry = tk.Entry(update_window, width=30)
+    id_entry.grid(row=1, column=1, padx=5, pady=5)
+
+    # Button to update student information
+    update_button = tk.Button(update_window, text="Update", command=lambda: perform_update(student_id, name_entry.get(), id_entry.get()))
+    update_button.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
+
+    # Function to perform the update operation
+    def perform_update(student_id, new_name, new_id):
         try:
             # Establish a connection to the SQL Server database
             connection = pymssql.connect(server='your_server_name',
@@ -23,8 +36,35 @@ def delete_student(student_id):
                                          database='your_database_name')
             cursor = connection.cursor()
 
+            # Execute an SQL UPDATE statement to update the student information
+            cursor.execute("UPDATE Students SET student_name = %s, id = %s WHERE student_id = %s", (new_name, new_id, student_id))
+            connection.commit()
+
+            # Close the cursor and connection
+            cursor.close()
+            connection.close()
+
+            # Show success message
+            messagebox.showinfo("Success", "Student information updated successfully!")
+
+            # Close the update window
+            update_window.destroy()
+        except Exception as e:
+            # Show error message if an error occurs
+            messagebox.showerror("Error", f"An error occurred: {str(e)}")
+
+# Function to handle deleting a student
+def delete_student(student_id):
+    # Prompt the user for confirmation before deleting the student
+    confirmed = messagebox.askyesno("Confirmation", "Are you sure you want to delete this student?")
+    if confirmed:
+        try:
+            # Establish a connection to the SQL Server database
+            connection = pymssql.connect(server='Z4P5-NB003', user='sa', password='p@ssw0rd',database='sekolah')
+            cursor = connection.cursor()
+
             # Execute an SQL DELETE statement to delete the student from the database
-            cursor.execute("DELETE FROM Students WHERE student_id = %s", (student_id,))
+            cursor.execute("DELETE FROM Students WHERE id = %s", (student_id,))
             connection.commit()
 
             # Close the cursor and connection
